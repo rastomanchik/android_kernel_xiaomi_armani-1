@@ -351,10 +351,17 @@ CC		= $(srctree)/scripts/gcc-wrapper.py $(REAL_CC)
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-CFLAGS_MODULE   =
-AFLAGS_MODULE   =
+
+OPTIMIZFLAGS	= -mcpu=cortex-a7 -mtune=cortex-a7 -mvectorize-with-neon-quad \
+		  -fgcse-las -fgcse-sm -fipa-pta -fivopts -fomit-frame-pointer \
+		  -frename-registers -fsection-anchors \
+		  -ftree-loop-im -ftree-loop-ivcanon -funsafe-loop-optimizations \
+		  -funswitch-loops -fweb
+
+CFLAGS_MODULE   = -DMODULE $(OPTIMIZFLAGS)
+AFLAGS_MODULE   = -DMODULE $(OPTIMIZFLAGS)
 LDFLAGS_MODULE  =
-CFLAGS_KERNEL	=
+CFLAGS_KERNEL	= $(OPTIMIZFLAGS)
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -368,11 +375,17 @@ LINUXINCLUDE    := -I$(srctree)/arch/$(hdr-arch)/include \
 
 KBUILD_CPPFLAGS := -D__KERNEL__
 
-KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
-		   -fno-strict-aliasing -fno-common \
-		   -Werror-implicit-function-declaration \
-		   -Wno-format-security \
-		   -fno-delete-null-pointer-checks
+KBUILD_CFLAGS   := -Wall -Wunused -Wundef -Wstrict-prototypes \
+		            -fno-strict-aliasing -fno-common \
+		            -Werror-implicit-function-declaration \
+		            -Wno-format-security -Wno-discarded-qualifiers \
+		            -Wno-discarded-array-qualifiers -Wno-bool-compare \
+		            -fno-delete-null-pointer-checks -Wno-logical-not-parentheses \
+		            -std=gnu89
+
+# for gcc-6
+KBUILD_CFLAGS   += -Wno-array-bounds
+
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -563,7 +576,7 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
+KBUILD_CFLAGS	+= -Os
 else
 KBUILD_CFLAGS	+= -O2
 endif
@@ -578,10 +591,6 @@ endif
 ifndef CONFIG_CC_STACKPROTECTOR
 KBUILD_CFLAGS += $(call cc-option, -fno-stack-protector)
 endif
-
-# This warning generated too much noise in a regular build.
-# Use make W=1 to enable this warning (see scripts/Makefile.build)
-KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
 
 ifdef CONFIG_FRAME_POINTER
 KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
@@ -615,23 +624,12 @@ ifdef CONFIG_DYNAMIC_FTRACE
 endif
 endif
 
-# We trigger additional mismatches with less inlining
-ifdef CONFIG_DEBUG_SECTION_MISMATCH
-KBUILD_CFLAGS += $(call cc-option, -fno-inline-functions-called-once)
-endif
-
 # arch Makefile may override CC so keep this after arch Makefile is included
 NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
 CHECKFLAGS     += $(NOSTDINC_FLAGS)
 
 # warn about C99 declaration after statement
 KBUILD_CFLAGS += $(call cc-option,-Wdeclaration-after-statement,)
-
-# disable pointer signed / unsigned warnings in gcc 4.0
-KBUILD_CFLAGS += $(call cc-disable-warning, pointer-sign)
-
-# disable invalid "can't wrap" optimizations for signed / pointers
-KBUILD_CFLAGS	+= $(call cc-option,-fno-strict-overflow)
 
 # conserve stack if available
 KBUILD_CFLAGS   += $(call cc-option,-fconserve-stack)

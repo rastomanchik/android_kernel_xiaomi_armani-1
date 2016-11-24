@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "****Очистка старых конфигов****"
+export ARCH=arm
+
+export CROSS_COMPILE=/usr/bin/arm-none-eabi-
+export EABI_PATCH=/usr/bin
+
+#make clean && make mrproper
+
+echo "****Сборка ядра****"
+make cyanogenmod_armani_defconfig
+make -j5
+echo "****Готово****"
+
