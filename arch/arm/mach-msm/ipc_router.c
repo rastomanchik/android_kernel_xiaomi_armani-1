@@ -376,7 +376,6 @@ static struct sk_buff_head *msm_ipc_router_buf_to_skb(void *buf,
 	struct sk_buff *skb;
 	int first = 1, offset = 0;
 	int skb_size, data_size;
-	void *data;
 	int last = 1;
 	int align_size;
 
@@ -412,7 +411,7 @@ static struct sk_buff_head *msm_ipc_router_buf_to_skb(void *buf,
 			first = 0;
 		}
 
-		data = skb_put(skb, data_size);
+		skb_put(skb, data_size);
 		memcpy(skb->data, buf + offset, data_size);
 		skb_queue_tail(skb_head, skb);
 		offset += data_size;
@@ -1885,7 +1884,7 @@ static int process_resume_tx_msg(union rr_control_msg *msg,
 prtm_out:
 	up_read(&routing_table_lock_lha3);
 	up_read(&local_ports_lock_lha2);
-	return 0;
+	return ret;
 }
 
 static int process_new_server_msg(struct msm_ipc_router_xprt_info *xprt_info,

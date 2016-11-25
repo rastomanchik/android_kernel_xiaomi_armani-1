@@ -1358,9 +1358,7 @@ int cifs_lock(struct file *file, int cmd, struct file_lock *flock)
 	bool posix_lck = false;
 	struct cifs_sb_info *cifs_sb;
 	struct cifs_tcon *tcon;
-	struct cifsInodeInfo *cinode;
 	struct cifsFileInfo *cfile;
-	__u16 netfid;
 	__u8 type;
 
 	rc = -EACCES;
@@ -1375,8 +1373,6 @@ int cifs_lock(struct file *file, int cmd, struct file_lock *flock)
 	cifs_sb = CIFS_SB(file->f_path.dentry->d_sb);
 	cfile = (struct cifsFileInfo *)file->private_data;
 	tcon = tlink_tcon(cfile->tlink);
-	netfid = cfile->netfid;
-	cinode = CIFS_I(file->f_path.dentry->d_inode);
 
 	if ((tcon->ses->capabilities & CAP_UNIX) &&
 	    (CIFS_UNIX_FCNTL_CAP & le64_to_cpu(tcon->fsUnixInfo.Capability)) &&
@@ -2181,7 +2177,6 @@ cifs_iovec_write(struct file *file, const struct iovec *iov,
 	loff_t offset;
 	struct iov_iter it;
 	struct cifsFileInfo *open_file;
-	struct cifs_tcon *tcon;
 	struct cifs_sb_info *cifs_sb;
 	struct cifs_writedata *wdata, *tmp;
 	struct list_head wdata_list;
@@ -2199,7 +2194,6 @@ cifs_iovec_write(struct file *file, const struct iovec *iov,
 	INIT_LIST_HEAD(&wdata_list);
 	cifs_sb = CIFS_SB(file->f_path.dentry->d_sb);
 	open_file = file->private_data;
-	tcon = tlink_tcon(open_file->tlink);
 	offset = *poffset;
 
 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_RWPIDFORWARD)
@@ -2292,7 +2286,7 @@ restart_loop:
 	if (total_written > 0)
 		*poffset += total_written;
 
-	cifs_stats_bytes_written(tcon, total_written);
+	cifs_stats_bytes_written(tlink_tcon(open_file->tlink), total_written);
 	return total_written ? total_written : (ssize_t)rc;
 }
 

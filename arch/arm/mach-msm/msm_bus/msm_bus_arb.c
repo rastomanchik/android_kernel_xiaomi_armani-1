@@ -612,7 +612,7 @@ int msm_bus_scale_client_update_request(uint32_t cl, unsigned index)
 {
 	int i, ret = 0;
 	struct msm_bus_scale_pdata *pdata;
-	int pnode, src, curr, ctx;
+	int pnode, src, curr;
 	uint64_t req_clk, req_bw, curr_clk, curr_bw;
 	struct msm_bus_client *client = (struct msm_bus_client *)cl;
 	if (IS_ERR_OR_NULL(client)) {
@@ -690,7 +690,6 @@ int msm_bus_scale_client_update_request(uint32_t cl, unsigned index)
 	}
 
 	client->curr = index;
-	ctx = ACTIVE_CTX;
 	msm_bus_dbg_client_data(client->pdata, index, cl);
 	bus_for_each_dev(&msm_bus_type, NULL, NULL, msm_bus_commit_fn);
 

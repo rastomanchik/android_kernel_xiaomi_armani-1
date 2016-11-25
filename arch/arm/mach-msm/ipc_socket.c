@@ -130,7 +130,6 @@ static struct sk_buff_head *msm_ipc_router_build_msg(unsigned int num_sect,
 	struct sk_buff *msg;
 	int i, copied, first = 1;
 	int data_size = 0, request_size, offset;
-	void *data;
 	int last = 0;
 	int align_size;
 
@@ -177,7 +176,7 @@ static struct sk_buff_head *msm_ipc_router_build_msg(unsigned int num_sect,
 				first = 0;
 			}
 
-			data = skb_put(msg, data_size);
+			skb_put(msg, data_size);
 			copied = !copy_from_user(msg->data,
 					msg_sect[i].iov_base + offset,
 					data_size);

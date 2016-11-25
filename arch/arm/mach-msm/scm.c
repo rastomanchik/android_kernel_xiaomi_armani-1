@@ -429,7 +429,6 @@ EXPORT_SYMBOL(scm_call_atomic3);
 s32 scm_call_atomic4_3(u32 svc, u32 cmd, u32 arg1, u32 arg2,
 		u32 arg3, u32 arg4, u32 *ret1, u32 *ret2)
 {
-	int ret;
 	int context_id;
 	register u32 r0 asm("r0") = SCM_ATOMIC(svc, cmd, 4);
 	register u32 r1 asm("r1") = (u32)&context_id;
@@ -452,7 +451,6 @@ s32 scm_call_atomic4_3(u32 svc, u32 cmd, u32 arg1, u32 arg2,
 		"smc	#0	@ switch to secure world\n"
 		: "=r" (r0), "=r" (r1), "=r" (r2)
 		: "r" (r0), "r" (r1), "r" (r2), "r" (r3), "r" (r4), "r" (r5));
-	ret = r0;
 	if (ret1)
 		*ret1 = r1;
 	if (ret2)

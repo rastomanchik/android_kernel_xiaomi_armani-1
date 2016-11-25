@@ -2424,7 +2424,6 @@ dump_error:
 static void ocmem_sched_wk_func(struct work_struct *work)
 {
 
-	struct ocmem_buf *buffer = NULL;
 	struct ocmem_handle *handle = NULL;
 	struct ocmem_req *req = ocmem_fetch_req();
 
@@ -2435,7 +2434,7 @@ static void ocmem_sched_wk_func(struct work_struct *work)
 
 	pr_debug("ocmem: sched_wk pending req %p\n", req);
 	handle = req_to_handle(req);
-	buffer = handle_to_buffer(handle);
+	handle_to_buffer(handle);
 	BUG_ON(req->op == SCHED_NOP);
 
 	switch (req->op) {

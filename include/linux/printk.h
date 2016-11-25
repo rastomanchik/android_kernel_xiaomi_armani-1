@@ -83,7 +83,7 @@ struct va_format {
  * gcc's format and side-effect checking.
  */
 static inline __printf(1, 2)
-int no_printk(const char *fmt, ...)
+int no_printk(const char __attribute__((unused)) *fmt, ...)
 {
 	return 0;
 }

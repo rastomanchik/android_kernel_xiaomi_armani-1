@@ -116,7 +116,6 @@ static void smp2p_rmt_lpb_worker(struct work_struct *work)
 {
 	struct smp2p_loopback_ctx *ctx;
 	int lpb_cmd;
-	int lpb_cmd_type;
 	int lpb_data;
 
 	ctx = container_of(work, struct smp2p_loopback_ctx, rmt_lpb_work);
@@ -127,7 +126,6 @@ static void smp2p_rmt_lpb_worker(struct work_struct *work)
 	if (ctx->rmt_cmd.previous_value == ctx->rmt_cmd.current_value)
 		return;
 
-	lpb_cmd_type =  SMP2P_GET_RMT_CMD_TYPE(ctx->rmt_cmd.current_value);
 	lpb_cmd = SMP2P_GET_RMT_CMD(ctx->rmt_cmd.current_value);
 	lpb_data = SMP2P_GET_RMT_DATA(ctx->rmt_cmd.current_value);
 

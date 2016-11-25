@@ -181,7 +181,7 @@ static int commit_region_state(unsigned region_num)
 					ocmem_base + PSCGC_CTL_n(region_num));
 	/* Barrier to commit the region state */
 	mb();
-	return 0;
+	return rc;
 }
 
 /* Returns the current state of a OCMEM region */

@@ -647,39 +647,43 @@ void free_bootmem_cpumask_var(cpumask_var_t mask);
 #else
 typedef struct cpumask cpumask_var_t[1];
 
-static inline bool alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
+static inline bool alloc_cpumask_var(cpumask_var_t __attribute__((unused)) *mask,
+                                    gfp_t __attribute__((unused)) flags)
 {
 	return true;
 }
 
-static inline bool alloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags,
-					  int node)
+static inline bool alloc_cpumask_var_node(cpumask_var_t __attribute__((unused)) *mask,
+                                            gfp_t __attribute__((unused)) flags,
+					                        int __attribute__((unused)) node)
 {
 	return true;
 }
 
-static inline bool zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
+static inline bool zalloc_cpumask_var(cpumask_var_t *mask,
+                                        gfp_t __attribute__((unused)) flags)
 {
 	cpumask_clear(*mask);
 	return true;
 }
 
-static inline bool zalloc_cpumask_var_node(cpumask_var_t *mask, gfp_t flags,
-					  int node)
+static inline bool zalloc_cpumask_var_node(cpumask_var_t *mask,
+                                            gfp_t __attribute__((unused)) flags,
+					                        int __attribute__((unused)) node)
 {
 	cpumask_clear(*mask);
 	return true;
 }
 
-static inline void alloc_bootmem_cpumask_var(cpumask_var_t *mask)
+static inline void alloc_bootmem_cpumask_var(cpumask_var_t __attribute__((unused)) *mask)
 {
 }
 
-static inline void free_cpumask_var(cpumask_var_t mask)
+static inline void free_cpumask_var(cpumask_var_t __attribute__((unused)) mask)
 {
 }
 
-static inline void free_bootmem_cpumask_var(cpumask_var_t mask)
+static inline void free_bootmem_cpumask_var(cpumask_var_t __attribute__((unused)) mask)
 {
 }
 #endif /* CONFIG_CPUMASK_OFFSTACK */
@@ -719,7 +723,7 @@ void init_cpu_online(const struct cpumask *src);
 	((struct cpumask *)(1 ? (bitmap)				\
 			    : (void *)sizeof(__check_is_bitmap(bitmap))))
 
-static inline int __check_is_bitmap(const unsigned long *bitmap)
+static inline int __check_is_bitmap(const unsigned long __attribute__((unused)) *bitmap)
 {
 	return 1;
 }

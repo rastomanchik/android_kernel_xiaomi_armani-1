@@ -43,6 +43,7 @@
 
 #define SMP2P_GET_BITS(hdr_val, mask, bit) \
 	(((hdr_val) & (mask)) >> (bit))
+
 #define SMP2P_SET_BITS(hdr_val, mask, bit, new_value) \
 	{\
 		hdr_val = (hdr_val & ~(mask)) \

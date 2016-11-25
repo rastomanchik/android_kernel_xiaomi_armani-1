@@ -497,7 +497,6 @@ static void apr_reset_deregister(struct work_struct *work)
 int apr_deregister(void *handle)
 {
 	struct apr_svc *svc = handle;
-	struct apr_client *clnt;
 	uint16_t dest_id;
 	uint16_t client_id;
 
@@ -507,7 +506,6 @@ int apr_deregister(void *handle)
 	mutex_lock(&svc->m_lock);
 	dest_id = svc->dest_id;
 	client_id = svc->client_id;
-	clnt = &client[dest_id][client_id];
 
 	if (svc->port_cnt > 0 || svc->svc_cnt > 0) {
 		if (svc->port_cnt)

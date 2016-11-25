@@ -274,7 +274,7 @@ int qmi_handle_destroy(struct qmi_handle *handle)
 	msm_ipc_router_close_port((struct msm_ipc_port *)(handle->src_port));
 	kfree(handle->dest_info);
 	kfree(handle);
-	return 0;
+	return rc;
 }
 EXPORT_SYMBOL(qmi_handle_destroy);
 

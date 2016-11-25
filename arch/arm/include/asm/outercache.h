@@ -83,11 +83,14 @@ static inline void outer_resume(void)
 
 #else
 
-static inline void outer_inv_range(phys_addr_t start, phys_addr_t end)
+static inline void outer_inv_range(phys_addr_t __attribute__((unused)) start,
+                                    phys_addr_t __attribute__((unused)) end)
 { }
-static inline void outer_clean_range(phys_addr_t start, phys_addr_t end)
+static inline void outer_clean_range(phys_addr_t __attribute__((unused)) start,
+                                    phys_addr_t __attribute__((unused)) end)
 { }
-static inline void outer_flush_range(phys_addr_t start, phys_addr_t end)
+static inline void outer_flush_range(phys_addr_t __attribute__((unused)) start,
+                                    phys_addr_t __attribute__((unused)) end)
 { }
 static inline void outer_flush_all(void) { }
 static inline void outer_inv_all(void) { }

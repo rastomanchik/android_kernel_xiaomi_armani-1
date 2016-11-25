@@ -16,7 +16,6 @@
 #include "mdss_mdp.h"
 #include "mdss_panel.h"
 #include "mdss_debug.h"
-#include "mdss_mdp_trace.h"
 
 #define VSYNC_EXPIRE_TICK 4
 
@@ -367,8 +366,6 @@ static void mdss_mdp_cmd_pingpong_done(void *arg)
 		pr_err("%s: should not have pingpong interrupt!\n", __func__);
 	}
 
-	trace_mdp_cmd_pingpong_done(ctl, ctx->pp_num,
-			atomic_read(&ctx->koff_cnt));
 	pr_debug("%s: ctl_num=%d intf_num=%d ctx=%d kcnt=%d\n", __func__,
 		ctl->num, ctl->intf_num, ctx->pp_num,
 			atomic_read(&ctx->koff_cnt));
@@ -665,8 +662,6 @@ int mdss_mdp_cmd_kickoff(struct mdss_mdp_ctl *ctl, void *arg)
 	atomic_inc(&ctx->koff_cnt);
 	if (sctx)
 		atomic_inc(&sctx->koff_cnt);
-
-	trace_mdp_cmd_kickoff(ctl->num, atomic_read(&ctx->koff_cnt));
 
 	mdss_mdp_cmd_clk_on(ctx);
 

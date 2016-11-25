@@ -528,7 +528,6 @@ struct msm_bus_fabric_registration
 {
 	struct device_node *of_node;
 	struct msm_bus_fabric_registration *pdata;
-	bool mem_err = false;
 	int ret = 0;
 	const char *sel_str;
 
@@ -542,7 +541,6 @@ struct msm_bus_fabric_registration
 			sizeof(struct msm_bus_fabric_registration), GFP_KERNEL);
 	if (!pdata) {
 		pr_err("Error: Memory allocation for pdata failed\n");
-		mem_err = true;
 		goto err;
 	}
 

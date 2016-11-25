@@ -258,7 +258,6 @@ static const struct file_operations msm_pm_stats_fops = {
 void msm_pm_add_stats(enum msm_pm_time_stats_id *enable_stats, int size)
 {
 	unsigned int cpu;
-	struct proc_dir_entry *d_entry;
 	int i = 0;
 
 	for_each_possible_cpu(cpu) {
@@ -315,6 +314,6 @@ void msm_pm_add_stats(enum msm_pm_time_stats_id *enable_stats, int size)
 	suspend_stats.first_bucket_time =
 		CONFIG_MSM_SUSPEND_STATS_FIRST_BUCKET;
 
-	d_entry = proc_create_data("msm_pm_stats", S_IRUGO | S_IWUSR | S_IWGRP,
+	proc_create_data("msm_pm_stats", S_IRUGO | S_IWUSR | S_IWGRP,
 			NULL, &msm_pm_stats_fops, NULL);
 }

@@ -452,7 +452,7 @@ extern void tracing_stop(void);
 extern void ftrace_off_permanent(void);
 
 static inline __printf(1, 2)
-void ____trace_printk_check_format(const char *fmt, ...)
+void ____trace_printk_check_format(const char __attribute__((unused)) *fmt, ...)
 {
 }
 #define __trace_printk_check_format(fmt, args...)			\

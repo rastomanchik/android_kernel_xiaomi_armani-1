@@ -141,7 +141,8 @@ static inline void do_raw_spin_lock(raw_spinlock_t *lock) __acquires(lock)
 }
 
 static inline void
-do_raw_spin_lock_flags(raw_spinlock_t *lock, unsigned long *flags) __acquires(lock)
+do_raw_spin_lock_flags(raw_spinlock_t *lock,
+        unsigned long __attribute__((unused)) *flags) __acquires(lock)
 {
 	__acquire(lock);
 	arch_spin_lock_flags(&lock->raw_lock, *flags);

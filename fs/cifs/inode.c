@@ -2111,8 +2111,6 @@ static int
 cifs_setattr_nounix(struct dentry *direntry, struct iattr *attrs)
 {
 	int xid;
-	uid_t uid = NO_CHANGE_32;
-	gid_t gid = NO_CHANGE_32;
 	struct inode *inode = direntry->d_inode;
 	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
 	struct cifsInodeInfo *cifsInode = CIFS_I(inode);
@@ -2163,13 +2161,16 @@ cifs_setattr_nounix(struct dentry *direntry, struct iattr *attrs)
 			goto cifs_setattr_exit;
 	}
 
+#ifdef CONFIG_CIFS_ACL
+	uid_t uid = NO_CHANGE_32;
+	gid_t gid = NO_CHANGE_32;
+
 	if (attrs->ia_valid & ATTR_UID)
 		uid = attrs->ia_uid;
 
 	if (attrs->ia_valid & ATTR_GID)
 		gid = attrs->ia_gid;
 
-#ifdef CONFIG_CIFS_ACL
 	if (cifs_sb->mnt_cifs_flags & CIFS_MOUNT_CIFS_ACL) {
 		if (uid != NO_CHANGE_32 || gid != NO_CHANGE_32) {
 			rc = id_mode_to_cifs_acl(inode, full_path, NO_CHANGE_64,

@@ -435,20 +435,22 @@ static inline void node_set_offline(int nid)
 
 #else
 
-static inline int node_state(int node, enum node_states state)
+static inline int node_state(int node, enum node_states __attribute__((unused)) state)
 {
 	return node == 0;
 }
 
-static inline void node_set_state(int node, enum node_states state)
+static inline void node_set_state(int __attribute__((unused)) node,
+                                enum node_states __attribute__((unused)) state)
 {
 }
 
-static inline void node_clear_state(int node, enum node_states state)
+static inline void node_clear_state(int __attribute__((unused)) node,
+                                    enum node_states __attribute__((unused)) state)
 {
 }
 
-static inline int num_node_state(enum node_states state)
+static inline int num_node_state(enum node_states __attribute__((unused)) state)
 {
 	return 1;
 }
@@ -469,7 +471,7 @@ static inline int num_node_state(enum node_states state)
 #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
 extern int node_random(const nodemask_t *maskp);
 #else
-static inline int node_random(const nodemask_t *mask)
+static inline int node_random(const nodemask_t __attribute__((unused)) *mask)
 {
 	return 0;
 }

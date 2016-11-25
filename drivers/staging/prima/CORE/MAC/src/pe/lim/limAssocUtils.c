@@ -4019,13 +4019,15 @@ tSirRetStatus limStaSendAddBssPreAssoc( tpAniSirGlobal pMac, tANI_U8 updateEntry
 
     if(pMac->lim.gLimProtectionControl != WNI_CFG_FORCE_POLICY_PROTECTION_DISABLE)
         limDecideStaProtectionOnAssoc(pMac, pBeaconStruct, psessionEntry);
-        vos_mem_copy(pAddBssParams->bssId, bssDescription->bssId,
-                     sizeof(tSirMacAddr));
+    
+    vos_mem_copy(pAddBssParams->bssId,
+                bssDescription->bssId,
+                sizeof(tSirMacAddr));
 
     // Fill in tAddBssParams selfMacAddr
     vos_mem_copy(pAddBssParams->selfMacAddr,
-                 psessionEntry->selfMacAddr,
-                 sizeof(tSirMacAddr));
+                psessionEntry->selfMacAddr,
+                sizeof(tSirMacAddr));
     limLog(pMac, LOG1, FL("sessionid: %d updateEntry = %d limsystemrole = %d "),
     psessionEntry->smeSessionId,updateEntry,psessionEntry->limSystemRole);
 
